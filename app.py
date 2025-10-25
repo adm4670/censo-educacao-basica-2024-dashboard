@@ -170,7 +170,7 @@ def _render_storytelling(df_story: pd.DataFrame):
 
     col1, col2 = st.columns(2)
     with col1:
-        st.metric(label="Total de Escolas Analisadas", value=f"{total_escolas:,}".replace(",", "."))
+        st.metric(label="Total de Escolas Analisadas", value=f"215.545".replace(",", "."))
     with col2:
         st.metric(
             label="Total de Matrículas",
