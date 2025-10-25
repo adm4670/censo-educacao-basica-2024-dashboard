@@ -65,7 +65,7 @@ if selected_regiao != 'Todas':
 
 # --- Título Principal ---
 st.title("🇧🇷 Censo da Educação Básica 2024: Painel Analítico")
-st.markdown("Uma visão estratégica e intuitiva dos microdados do Censo Escolar, focada em clareza e narrativa visual.")
+# st.markdown("Uma visão estratégica e intuitiva dos microdados do Censo Escolar, focada em clareza e narrativa visual.")
 
 # --- Estrutura de Abas Temáticas ---
 tab_overview, tab_matriculas, tab_infraestrutura, tab_docente = st.tabs([
