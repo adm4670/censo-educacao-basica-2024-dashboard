@@ -155,7 +155,7 @@ def _harmonize_story_columns(df_in: pd.DataFrame) -> pd.DataFrame:
 
 def _render_storytelling(df_story: pd.DataFrame):
     st.markdown("### Storytelling: **EQP/Aluno** e Disparidades")
-    st.caption("Exploração narrativa inspirada em *Storytelling with Data*.")
+    # st.caption("Exploração narrativa inspirada em *Storytelling with Data*.")
 
     df_st = _harmonize_story_columns(df_story)
 
