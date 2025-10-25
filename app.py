@@ -92,4 +92,3 @@ with tab_docente:
 # --- Rodapé ---
 st.sidebar.markdown("---")
 st.sidebar.caption("Dados: Censo da Educação Básica 2024")
-st.sidebar.caption("Desenvolvido por Manus - Cientista de Dados em Educação")
