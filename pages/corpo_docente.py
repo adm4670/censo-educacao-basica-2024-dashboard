@@ -3,16 +3,13 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 
-# Paleta de cores padrão Plotly (mais rica e diversificada)
 COLOR_PALETTE = px.colors.qualitative.Plotly
 
 def render(df):
     """Renderiza a aba de Corpo Docente e Turmas."""
     st.header("Corpo Docente e Turmas")
-    st.markdown("""
-        Esta seção foca nos recursos humanos e na organização das turmas, fornecendo indicadores 
-        críticos para a qualidade do ensino, como a relação aluno-professor e o tamanho médio das turmas.
-    """)
+    st.markdown("""Esta seção foca nos recursos humanos e na organização das turmas, fornecendo indicadores 
+        críticos para a qualidade do ensino, como a relação aluno-professor e o tamanho médio das turmas.""")
 
     # 1. Relação Aluno-Professor (RAP)
     st.subheader("Relação Aluno-Professor (RAP) e Tamanho Médio das Turmas")
@@ -41,17 +38,13 @@ def render(df):
 
     st.markdown("---")
 
-    # 2. Distribuição de Docentes por Etapa de Ensino (Gráfico de Barras)
     st.subheader("Distribuição de Docentes por Etapa de Ensino")
-    
-    # Colunas de Docentes por Etapa
     doc_cols = {
         'QT_DOC_INF': 'Educação Infantil',
         'QT_DOC_FUND': 'Ensino Fundamental',
         'QT_DOC_MED': 'Ensino Médio',
     }
     
-    # Agregação dos totais de docentes por etapa
     df_doc_etapa = df[list(doc_cols.keys())].sum().reset_index()
     df_doc_etapa.columns = ['Variavel', 'Total de Docentes']
     df_doc_etapa['Etapa de Ensino'] = df_doc_etapa['Variavel'].map(doc_cols)
@@ -76,16 +69,12 @@ def render(df):
     
     st.markdown("---")
 
-    # 3. Comparativo de RAP por Dependência Administrativa
     st.subheader("Relação Aluno-Professor (RAP) por Rede de Ensino")
-
-    # Agrupamento por Dependência Administrativa
     df_rap_dependencia = df.groupby('TP_DEPENDENCIA_DESC').agg(
         total_matriculas=('QT_MAT_BAS', 'sum'),
         total_docentes=('QT_DOC_BAS', 'sum')
     ).reset_index()
     
-    # Cálculo do RAP
     df_rap_dependencia['RAP'] = np.where(
         df_rap_dependencia['total_docentes'] > 0, 
         df_rap_dependencia['total_matriculas'] / df_rap_dependencia['total_docentes'], 
@@ -106,9 +95,7 @@ def render(df):
     fig_rap.update_layout(uniformtext_minsize=8, uniformtext_mode='hide', yaxis_range=[0, df_rap_dependencia['RAP'].max() * 1.1])
     st.plotly_chart(fig_rap, use_container_width=True)
 
-    st.markdown("""
-        **Interpretação:** O comparativo do RAP entre as redes de ensino revela diferenças na gestão de pessoal. 
+    st.markdown("""**Interpretação:** O comparativo do RAP entre as redes de ensino revela diferenças na gestão de pessoal. 
         A Rede Federal, por exemplo, frequentemente apresenta um RAP menor devido à sua natureza e foco. 
         Valores muito discrepantes entre redes (pública vs. privada, ou municipal vs. estadual) merecem 
-        investigação para entender as causas e possíveis impactos na qualidade.
-    """)
+        investigação para entender as causas e possíveis impactos na qualidade.""")

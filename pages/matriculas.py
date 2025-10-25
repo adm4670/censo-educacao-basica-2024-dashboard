@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Paleta de cores padrão Plotly (mais rica e diversificada)
 COLOR_PALETTE = px.colors.qualitative.Plotly
 
 def render(df):
@@ -13,7 +12,6 @@ def render(df):
         oferecendo insights sobre a estrutura da demanda educacional e a oferta de ensino por rede.
     """)
 
-    # Colunas de Matrículas por Etapa
     mat_cols = {
         'QT_MAT_INF': 'Educação Infantil',
         'QT_MAT_FUND': 'Ensino Fundamental',
@@ -22,10 +20,7 @@ def render(df):
         'QT_MAT_ESP': 'Educação Especial'
     }
     
-    # 1. Matrículas por Etapa de Ensino (Gráfico de Barras)
     st.subheader("Distribuição de Matrículas por Etapa de Ensino")
-    
-    # Agregação dos totais de matrícula por etapa
     df_mat_etapa = df[list(mat_cols.keys())].sum().reset_index()
     df_mat_etapa.columns = ['Variavel', 'Total de Matrículas']
     df_mat_etapa['Etapa de Ensino'] = df_mat_etapa['Variavel'].map(mat_cols)
@@ -34,7 +29,7 @@ def render(df):
         df_mat_etapa,
         x='Etapa de Ensino',
         y='Total de Matrículas',
-        color='Etapa de Ensino', # Usando cor para diferenciar as categorias
+        color='Etapa de Ensino',
         title='Total de Matrículas por Etapa de Ensino',
         labels={'Total de Matrículas': 'Matrículas'},
         color_discrete_sequence=COLOR_PALETTE
@@ -49,14 +44,8 @@ def render(df):
     """)
 
     st.markdown("---")
-
-    # 2. Matrículas por Localização e Etapa (Análise Comparativa)
     st.subheader("Matrículas por Etapa e Localização (Urbana vs. Rural)")
-
-    # Agregação por Localização e Etapa
     df_mat_local = df.groupby('TP_LOCALIZACAO_DESC')[list(mat_cols.keys())].sum().reset_index()
-    
-    # Transformar o DataFrame para o formato 'long' para visualização
     df_mat_local_long = pd.melt(
         df_mat_local, 
         id_vars=['TP_LOCALIZACAO_DESC'], 
@@ -85,8 +74,6 @@ def render(df):
     """)
     
     st.markdown("---")
-
-    # 3. Oferta de Etapas por Dependência Administrativa
     st.subheader("Oferta de Etapas de Ensino por Rede (Contagem de Escolas)")
     
     etapa_cols = {
@@ -98,10 +85,7 @@ def render(df):
         'IN_ESP': 'Especial'
     }
     
-    # Agrupamento por Dependência e Contagem de Escolas que Oferecem a Etapa (IN_* == 1)
     df_oferta = df.groupby('TP_DEPENDENCIA_DESC')[list(etapa_cols.keys())].sum().reset_index()
-    
-    # Transformar o DataFrame para o formato 'long'
     df_oferta_long = pd.melt(
         df_oferta, 
         id_vars=['TP_DEPENDENCIA_DESC'], 
@@ -126,5 +110,4 @@ def render(df):
     st.markdown("""
         **Interpretação:** Este gráfico mostra a **responsabilidade de oferta** de cada etapa por rede de ensino. 
         Por exemplo, a Educação Infantil é predominantemente ofertada pela rede Municipal e Privada, 
-        enquanto o Ensino Médio é majoritariamente Estadual e Privado.
-    """)
+        enquanto o Ensino Médio é majoritariamente Estadual e Privado.""")

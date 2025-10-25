@@ -12,9 +12,6 @@ from modules.data_loader import load_data
 from modules.utils import map_dependencia, map_localizacao
 from pages import overview, matriculas, infraestrutura, corpo_docente
 
-# =========================
-# Configuração da Página
-# =========================
 st.set_page_config(
     page_title="Censo da Educação Básica 2024 - Painel Analítico",
     page_icon="",
@@ -22,47 +19,30 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# =========================
-# Carregamento de Dados (Cache)
-# =========================
 df = load_data()
 
-# =========================
-# Sidebar (Filtros Globais)
-# =========================
 st.sidebar.title("Filtros de Análise")
 
-# 1. Dependência Administrativa
 dependencia_options = ['Todas'] + list(df['TP_DEPENDENCIA_DESC'].unique())
 selected_dependencia = st.sidebar.selectbox(
-    "Rede de Ensino (Dependência Administrativa)",
-    dependencia_options
-)
+    "Rede de Ensino (Dependência Administrativa)", 
+    dependencia_options )
 
-# 2. Localização
 localizacao_options = ['Todas'] + list(df['TP_LOCALIZACAO_DESC'].unique())
-selected_localizacao = st.sidebar.selectbox(
-    "Localização",
+selected_localizacao = st.sidebar.selectbox("Localização",
     localizacao_options
 )
 
-# 3. Estado (UF)
 uf_options = ['Todas'] + sorted(df['SG_UF'].unique().tolist())
 selected_uf = st.sidebar.selectbox(
     "Estado (UF)",
-    uf_options
-)
+    uf_options)
 
-# 4. Região
 regiao_options = ['Todas'] + sorted(df['NO_REGIAO'].unique().tolist())
 selected_regiao = st.sidebar.selectbox(
     "Região Geográfica",
-    regiao_options
-)
+    regiao_options)
 
-# =========================
-# Aplicação dos Filtros
-# =========================
 df_filtered = df.copy()
 
 if selected_dependencia != 'Todas':
@@ -77,14 +57,10 @@ if selected_uf != 'Todas':
 if selected_regiao != 'Todas':
     df_filtered = df_filtered[df_filtered['NO_REGIAO'] == selected_regiao]
 
-# =========================
-# Título Principal
-# =========================
+
 st.title("Censo da Educação Básica 2024: Painel Analítico")
 
-# =========================
-# Helpers da aba Storytelling (tab0)
-# =========================
+
 @st.cache_data
 def _load_data_story_from_path(path_csv: Path) -> pd.DataFrame:
     return pd.read_csv(path_csv)
@@ -155,7 +131,7 @@ def _harmonize_story_columns(df_in: pd.DataFrame) -> pd.DataFrame:
 
 def _render_storytelling(df_story: pd.DataFrame):
     st.markdown("### Storytelling: **EQP/Aluno** e Disparidades")
-    # st.caption("Exploração narrativa inspirada em *Storytelling with Data*.")
+    # st.caption("Exploração *Storytelling com dados*.")
 
     df_st = _harmonize_story_columns(df_story)
 
@@ -292,9 +268,7 @@ def _render_storytelling(df_story: pd.DataFrame):
     else:
         st.info("Colunas necessárias para modelagem não encontradas (TOTAL_EQUIPAMENTOS e/ou MATRICULAS).")
 
-# =========================
-# Estrutura de Abas
-# =========================
+
 tab_story, tab_overview, tab_matriculas, tab_infraestrutura, tab_docente = st.tabs([
     "Storytelling (EQP/Aluno)",
     "Visão Geral e Contexto",
@@ -303,16 +277,10 @@ tab_story, tab_overview, tab_matriculas, tab_infraestrutura, tab_docente = st.ta
     "Corpo Docente e Turmas"
 ])
 
-# =========================
-# Conteúdo das Abas
-# =========================
 with tab_story:
     st.subheader("O Abismo Digital na Educação Básica Brasileira")
     st.caption("Análise da relação entre infraestrutura tecnológica e matrículas (Censo Escolar 2024)")
 
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    # LÊ DIRETO DO ARQUIVO NO DIRETÓRIO RAIZ (SEM UPLOADER)
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     story_csv_path = Path("dados_limpos_educacao.csv")
     try:
         df_st_local = _load_data_story_from_path(story_csv_path)
@@ -334,8 +302,5 @@ with tab_infraestrutura:
 with tab_docente:
     corpo_docente.render(df_filtered)
 
-# =========================
-# Rodapé
-# =========================
 st.sidebar.markdown("---")
 st.sidebar.caption("Dados: Censo da Educação Básica 2024")

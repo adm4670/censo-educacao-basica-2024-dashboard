@@ -4,7 +4,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
-# Paleta de cores padrão Plotly (mais rica e diversificada)
 COLOR_PALETTE = px.colors.qualitative.Plotly
 
 def render(df):
@@ -15,7 +14,6 @@ def render(df):
         da distribuição de escolas, matrículas e docentes no contexto dos filtros aplicados.
     """)
 
-    # 1. Indicadores Descritivos (KPIs)
     col1, col2, col3, col4 = st.columns(4)
     
     total_escolas = df["CO_ENTIDADE"].nunique()
@@ -34,7 +32,6 @@ def render(df):
 
     st.markdown("---")
 
-    # 2. Distribuição por Dependência Administrativa (Gráfico de Barras)
     st.subheader("Distribuição de Matrículas por Rede de Ensino")
     
     df_dependencia = df.groupby("TP_DEPENDENCIA_DESC")["QT_MAT_BAS"].sum().reset_index()
@@ -44,7 +41,7 @@ def render(df):
         df_dependencia,
         x="Rede de Ensino",
         y="Total de Matrículas",
-        color="Rede de Ensino", # Usando cor para diferenciar as categorias
+        color="Rede de Ensino",
         title="Matrículas por Dependência Administrativa",
         labels={"Total de Matrículas": "Matrículas"},
         color_discrete_sequence=COLOR_PALETTE
@@ -59,8 +56,6 @@ def render(df):
     """)
     
     st.markdown("---")
-
-    # 3. Análise Comparativa Regional: RAP vs. Internet (Gráfico de Barras Duplas)
     st.subheader("Análise Regional: Relação Aluno-Professor (RAP) e Acesso à Internet")
     
     df_regional = df.groupby("NO_REGIAO").agg(
@@ -80,29 +75,25 @@ def render(df):
         (df_regional["escolas_com_internet"] / df_regional["total_escolas"]) * 100, 
         0
     )
-
-    # CORREÇÃO DO ERRO: Garantindo que o nome do eixo y seja 'y' ou 'y2' nos traços
+    
     fig_regional = go.Figure()
 
-    # Traço 1: RAP (Eixo Y Primário)
     fig_regional.add_trace(go.Bar(
         name='RAP (Alunos/Docente)',
         x=df_regional['NO_REGIAO'],
         y=df_regional['RAP'],
-        yaxis='y', # Eixo Y primário
+        yaxis='y',
         marker_color=COLOR_PALETTE[0]
     ))
 
-    # Traço 2: Internet (%) (Eixo Y Secundário)
     fig_regional.add_trace(go.Bar(
         name='Internet (%)',
         x=df_regional['NO_REGIAO'],
         y=df_regional['Proporção Internet (%)'],
-        yaxis='y2', # Eixo Y secundário
+        yaxis='y2',
         marker_color=COLOR_PALETTE[1]
     ))
 
-    # Atualização do Layout (Removendo as referências de cor nos eixos para evitar o erro)
     fig_regional.update_layout(
         title='Comparativo de Indicadores por Região',
         xaxis_title="Região Geográfica",
@@ -125,5 +116,4 @@ def render(df):
         **Interpretação:** Este gráfico de barras duplas permite uma **análise comparativa regional**. 
         A **Relação Aluno-Professor (RAP)** (eixo esquerdo) indica a sobrecarga potencial dos docentes, 
         enquanto a **Proporção de Escolas com Internet** (eixo direito) reflete a infraestrutura digital. 
-        Regiões com RAP alto e baixa conectividade podem enfrentar os maiores desafios de qualidade.
-    """)
+        Regiões com RAP alto e baixa conectividade podem enfrentar os maiores desafios de qualidade.""")
