@@ -17,7 +17,7 @@ from pages import overview, matriculas, infraestrutura, corpo_docente
 # =========================
 st.set_page_config(
     page_title="Censo da Educação Básica 2024 - Painel Analítico",
-    page_icon="🇧🇷",
+    # page_icon="🇧🇷",
     layout="wide",
     initial_sidebar_state="expanded"
 )
