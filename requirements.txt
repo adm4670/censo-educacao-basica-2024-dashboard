@@ -4,3 +4,6 @@ plotly
 openpyxl
 matplotlib
 seaborn
+scikit-learn==1.5.2
+numpy>=1.26,<3
+scipy>=1.10
