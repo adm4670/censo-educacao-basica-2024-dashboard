@@ -80,7 +80,7 @@ if selected_regiao != 'Todas':
 # =========================
 # Título Principal
 # =========================
-st.title("🇧🇷 Censo da Educação Básica 2024: Painel Analítico")
+st.title("Censo da Educação Básica 2024: Painel Analítico")
 
 # =========================
 # Helpers da aba Storytelling (tab0)
